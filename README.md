@@ -33,9 +33,7 @@ php -m
 
 ## Como Executar
 
-1. Abra terminal na raiz do projeto:
-
-C:/Users/Joyce/Desktop/veiculos
+1. Abra terminal na raiz do projeto
 
 2. Inicie servidor embutido do PHP apontando para a pasta veiculos:
 
