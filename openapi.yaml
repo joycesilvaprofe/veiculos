@@ -1,0 +1,266 @@
+openapi: 3.0.3
+info:
+  title: API de Cadastro de Veiculos
+  version: 1.0.0
+  description: |
+    API para cadastro e listagem de veiculos.
+
+    Base URL local esperada durante desenvolvimento:
+    http://localhost:8001
+servers:
+  - url: http://localhost:8001
+    description: Servidor local
+
+tags:
+  - name: Veiculos
+    description: Operacoes de cadastro e listagem
+
+paths:
+  /php/inserir.php:
+    post:
+      tags:
+        - Veiculos
+      summary: Cadastra um novo veiculo
+      description: Insere um novo registro de veiculo com validacoes de negocio.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VeiculoInput'
+            examples:
+              exemploPadrao:
+                summary: Exemplo de cadastro valido
+                value:
+                  placa: ABC1D23
+                  marca: Volkswagen
+                  modelo: Gol
+                  ano_fabricacao: 2017
+                  ano_modelo: 2018
+                  cor: Prata
+                  combustivel: Flex
+                  quilometragem: 75300
+                  chassi: 9BWZZZ377VT004251
+                  renavam: 12345678901
+                  data_cadastro: 2026-04-23
+                  observacoes: Revisado
+      responses:
+        '201':
+          description: Veiculo cadastrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsertSuccessResponse'
+              example:
+                success: true
+                message: Veiculo cadastrado com sucesso.
+                id: 1
+        '409':
+          description: Conflito de unicidade (placa, chassi ou renavam)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: Placa, chassi ou renavam ja cadastrado.
+        '422':
+          description: Dados invalidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                placaInvalida:
+                  value:
+                    success: false
+                    message: Placa invalida.
+                campoObrigatorio:
+                  value:
+                    success: false
+                    message: Campo obrigatorio ausente: placa.
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: Erro interno ao cadastrar veiculo.
+
+  /php/listar.php:
+    get:
+      tags:
+        - Veiculos
+      summary: Lista veiculos cadastrados
+      description: Retorna ate 500 registros ordenados do mais recente para o mais antigo.
+      responses:
+        '200':
+          description: Consulta realizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponse'
+              example:
+                success: true
+                message: Consulta realizada com sucesso.
+                data:
+                  - id: 1
+                    placa: ABC1D23
+                    marca: Volkswagen
+                    modelo: Gol
+                    ano_fabricacao: 2017
+                    ano_modelo: 2018
+                    cor: Prata
+                    combustivel: Flex
+                    quilometragem: 75300
+                    chassi: 9BWZZZ377VT004251
+                    renavam: 12345678901
+                    data_cadastro: 2026-04-23
+                    observacoes: Revisado
+        '500':
+          description: Erro interno no servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                success: false
+                message: Erro ao consultar veiculos.
+
+components:
+  schemas:
+    VeiculoInput:
+      type: object
+      required:
+        - placa
+        - marca
+        - modelo
+        - ano_fabricacao
+        - ano_modelo
+        - cor
+        - combustivel
+        - quilometragem
+        - chassi
+        - renavam
+        - data_cadastro
+      properties:
+        placa:
+          type: string
+          minLength: 7
+          maxLength: 8
+          description: Placa do veiculo
+          example: ABC1D23
+        marca:
+          type: string
+          minLength: 2
+          maxLength: 60
+          example: Volkswagen
+        modelo:
+          type: string
+          minLength: 2
+          maxLength: 60
+          example: Gol
+        ano_fabricacao:
+          type: integer
+          minimum: 1900
+          maximum: 2100
+          example: 2017
+        ano_modelo:
+          type: integer
+          minimum: 1900
+          maximum: 2101
+          example: 2018
+        cor:
+          type: string
+          minLength: 2
+          maxLength: 30
+          example: Prata
+        combustivel:
+          type: string
+          minLength: 2
+          maxLength: 20
+          example: Flex
+        quilometragem:
+          type: integer
+          minimum: 0
+          maximum: 9999999
+          example: 75300
+        chassi:
+          type: string
+          minLength: 17
+          maxLength: 17
+          description: Chassi com 17 caracteres, sem I, O e Q
+          example: 9BWZZZ377VT004251
+        renavam:
+          type: string
+          pattern: '^[0-9]{11}$'
+          example: '12345678901'
+        data_cadastro:
+          type: string
+          format: date
+          example: 2026-04-23
+        observacoes:
+          type: string
+          maxLength: 500
+          example: Revisado
+
+    Veiculo:
+      allOf:
+        - $ref: '#/components/schemas/VeiculoInput'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+              example: 1
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - message
+      properties:
+        success:
+          type: boolean
+          example: false
+        message:
+          type: string
+          example: Erro interno no servidor.
+
+    InsertSuccessResponse:
+      type: object
+      required:
+        - success
+        - message
+        - id
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Veiculo cadastrado com sucesso.
+        id:
+          type: integer
+          example: 1
+
+    ListResponse:
+      type: object
+      required:
+        - success
+        - message
+        - data
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: Consulta realizada com sucesso.
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Veiculo'

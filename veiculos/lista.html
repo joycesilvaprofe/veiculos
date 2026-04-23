@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Veículos</title>
+  <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+
+<h1>Veículos</h1>
+
+<p><a href="index.html">Novo cadastro</a></p>
+
+<div id="status" role="status" aria-live="polite"></div>
+
+<button id="btnRecarregar" type="button">Recarregar</button>
+
+<table border="1">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Placa</th>
+      <th>Marca</th>
+      <th>Modelo</th>
+      <th>Ano Fab.</th>
+      <th>Ano Mod.</th>
+      <th>Cor</th>
+      <th>Combustivel</th>
+      <th>KM</th>
+      <th>Chassi</th>
+      <th>Renavam</th>
+      <th>Data Cadastro</th>
+      <th>Observacoes</th>
+    </tr>
+  </thead>
+  <tbody id="corpoTabela"></tbody>
+</table>
+
+<script src="js/lista.js"></script>
+</body>
+</html>

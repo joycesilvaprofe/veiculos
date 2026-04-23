@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastro de Veículos</title>
+  <link rel="stylesheet" href="style/style.css">
+</head>
+<body>
+
+<h1>Cadastro de Veículos</h1>
+
+<p><a href="lista.html">Ver lista de veículos</a></p>
+
+<form id="formVeiculo">
+  <input name="placa" placeholder="Placa" maxlength="8" required>
+  <input name="marca" placeholder="Marca" maxlength="60" required>
+  <input name="modelo" placeholder="Modelo" maxlength="60" required>
+  <input name="ano_fabricacao" type="number" placeholder="Ano Fabricacao" min="1900" max="2100" required>
+  <input name="ano_modelo" type="number" placeholder="Ano Modelo" min="1900" max="2100" required>
+  <input name="cor" placeholder="Cor" maxlength="30" required>
+  <input name="combustivel" placeholder="Combustivel" maxlength="20" required>
+  <input name="quilometragem" type="number" placeholder="KM" min="0" max="9999999" required>
+  <input name="chassi" placeholder="Chassi" minlength="17" maxlength="17" required>
+  <input name="renavam" placeholder="Renavam" minlength="11" maxlength="11" required>
+  <input name="data_cadastro" type="date" required>
+  <textarea name="observacoes" placeholder="Observacoes" maxlength="500"></textarea>
+
+  <button id="btnSalvar" type="submit">Salvar</button>
+</form>
+
+<div id="mensagem" role="status" aria-live="polite"></div>
+
+<script src="js/cadastro.js"></script>
+</body>
+</html>
