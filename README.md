@@ -77,7 +77,11 @@ A tabela sera criada automaticamente na primeira execucao.
 
 ## Como Executar
 
+<<<<<<< HEAD
 1. Abra terminal na raiz do projeto:
+=======
+1. Abra terminal na raiz do projeto
+>>>>>>> 23b37b45d8db0ce6fa06bc9515dd3dad8c10ff6a
 
 2. Inicie servidor embutido do PHP apontando para a pasta veiculos:
 
