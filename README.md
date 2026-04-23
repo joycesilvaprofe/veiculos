@@ -11,6 +11,8 @@ Aplicacao web simples para cadastrar e listar veiculos, com frontend em HTML, CS
 
 ## Estrutura do Projeto
 
+- [.env](.env): variáveis de ambiente (credenciais MySQL)
+- [.env.example](.env.example): template de configuração
 - [veiculos/index.html](veiculos/index.html): tela de cadastro
 - [veiculos/lista.html](veiculos/lista.html): tela de listagem
 - [veiculos/js/cadastro.js](veiculos/js/cadastro.js): logica de envio e validacao do formulario
@@ -24,18 +26,58 @@ Aplicacao web simples para cadastrar e listar veiculos, com frontend em HTML, CS
 
 - PHP 8.0 ou superior
 - Extensoes PHP habilitadas:
-	- PDO
-	- pdo_sqlite
+  - PDO
+  - pdo_mysql
+- MySQL 5.7 ou superior (ou MariaDB)
 
 Para verificar modulos carregados:
 
 php -m
 
+### Instalacao do MySQL
+
+#### Windows
+
+1. Baixe o MySQL Community Server em https://dev.mysql.com/downloads/mysql/
+2. Execute o instalador e siga as instrucoes
+3. Configure a senha do usuario root
+4. MySQL Server estara executando como servico do Windows
+
+#### macOS
+
+com Homebrew:
+
+brew install mysql
+brew services start mysql
+
+#### Linux (Ubuntu/Debian)
+
+sudo apt-get update
+sudo apt-get install mysql-server
+
+## Configuracao do Banco de Dados
+
+1. Copie `.env.example` para `.env`:
+
+cp .env.example .env
+
+2. Edite `.env` com suas credenciais MySQL:
+
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=seu_usuario
+DB_PASSWORD=sua_senha
+DB_NAME=veiculos
+
+3. Crie o banco de dados no MySQL:
+
+mysql -u seu_usuario -p -e "CREATE DATABASE IF NOT EXISTS veiculos CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+A tabela sera criada automaticamente na primeira execucao.
+
 ## Como Executar
 
 1. Abra terminal na raiz do projeto:
-
-C:/Users/Joyce/Desktop/veiculos
 
 2. Inicie servidor embutido do PHP apontando para a pasta veiculos:
 
@@ -51,8 +93,19 @@ Observacao:
 
 ## Banco de Dados
 
-- O arquivo SQLite e criado automaticamente em [veiculos/php/veiculos.sqlite](veiculos/php/veiculos.sqlite) na primeira operacao.
-- A tabela veiculos e criada automaticamente em [veiculos/php/conexao.php](veiculos/php/conexao.php).
+- Banco MySQL definido via variáveis de ambiente em [.env](.env)
+- Tabela `veiculos` é criada automaticamente na primeira operação
+- Credenciais editáveis em [.env](.env)
+
+Configuração padrão (editar conforme necessário):
+
+```
+DB_HOST=localhost
+DB_PORT=3306
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=veiculos
+```
 
 Campos da tabela:
 
@@ -134,12 +187,34 @@ No cadastro sao validados:
 
 ## Solucao de Problemas
 
+### Erro de conexao ao banco de dados
+
+Verifique:
+
+1. Se o MySQL esta executando
+2. Se as credenciais em [.env](.env) estao corretas
+3. Se o banco `veiculos` foi criado:
+
+mysql -u seu_usuario -p -e "SHOW DATABASES;"
+
+4. Se PDO e pdo_mysql estao habilitados:
+
+php -m | grep -i pdo
+
+### Falha ao inicializar tabela
+
+Se a tabela nao for criada automaticamente, execute manualmente:
+
+mysql -u seu_usuario -p veiculos < schema.sql
+
+(se um arquivo schema.sql for fornecido)
+
 ### Erro interno ao cadastrar veiculo
 
 Verifique:
 
-1. Se PDO e pdo_sqlite estao habilitados
-2. Permissao de escrita na pasta [veiculos/php](veiculos/php)
+1. Se pdo_mysql esta habilitado
+2. Permissao de escrita do usuario MySQL
 3. Se o endpoint [veiculos/php/inserir.php](veiculos/php/inserir.php) esta sendo acessado pela URL correta
 
 ### Porta ja em uso
