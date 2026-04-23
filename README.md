@@ -34,7 +34,7 @@ Para verificar modulos carregados:
 
 php -m
 
-### Instalacao do MySQL
+### Instalacao do MySQL / PODE SER VIA XAMP SEM PRECISAR DE INSTALAÇÃO
 
 #### Windows
 
